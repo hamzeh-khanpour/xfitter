@@ -845,7 +845,7 @@ void chi2_scan_()
                   pit->second.th_mc_mean = mean(xi);
                   pit->second.th_mc_var = rms(xi);
                 }
-              char num[10];
+              char num[20];
               sprintf (num, "%d", totmc);
               string msg = (string) "I: Found " + num + " Monte Carlo PDF uncertainties variations";
               hf_errlog_(25051401, msg.c_str(), msg.size());
@@ -882,7 +882,7 @@ void chi2_scan_()
 
 
               if ( ncorr + nsysloc > NSYSMAX_C ) {
-                char csys[6];
+                char csys[16];
                 sprintf( csys,"%i", ncorr + nsysloc) ;
                 string msg = (string) "S: Too many systematic sources, increase NSYSMAX_C to " + csys + " at least in  include/dimensions.h and recompile";
                 hf_errlog_(15111901,msg.c_str(), msg.size());

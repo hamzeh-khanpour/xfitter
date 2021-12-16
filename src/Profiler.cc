@@ -37,7 +37,7 @@ namespace xfitter
   void Profiler::storePdfFiles(int imember, int iPDF, std::string const& type) {
     string filename = _outputDir + "/pdfs_q2val_";
 
-    char tag[10];
+    char tag[20];
 
     if (imember>0) {
       if (type == "hessian") {

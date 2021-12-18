@@ -38,28 +38,33 @@ CC
       WG = 1.0/FLOAT(NPAR)
       SIGSAV = EDM
       APSI = AMIN
-         DO 2 I= 1, NPAR
+      DO I= 1, NPAR
          XT(I) = X(I)
          DSAV(I) = WERR(I)
-           DO 2 J = 1, I
-           NDEX = I*(I-1)/2 + J
-           P(I,J) = VHMAT(NDEX)
-    2      P(J,I) = P(I,J)
+         DO J = 1, I
+            NDEX = I*(I-1)/2 + J
+            P(I,J) = VHMAT(NDEX)
+            P(J,I) = P(I,J)
+         END DO
+      END DO
       CALL MNVERT(P,MAXINT,MAXINT,NPAR,IFAIL)
       IF (IFAIL .GE. 1)  GO TO 280
 C               Save inverted matrix in VT
-         DO 12 I= 1, NPAR
+      DO I= 1, NPAR
          NDEX = I*(I-1)/2
-           DO 12 J= 1, I
-           NDEX = NDEX + 1
-   12      VTHMAT(NDEX) = P(I,J)
+         DO J= 1, I
+            NDEX = NDEX + 1
+            VTHMAT(NDEX) = P(I,J)
+         END DO
+      END DO      
       LOOP = 0
 C
    20 CONTINUE
-         DO 25 I= 1, NPAR
+      DO I= 1, NPAR
          DIRIN(I) = 2.0*DSAV(I)
          CALL MNRN15(RNUM,ISEED)
-   25    X(I) = XT(I) + 2.0*DIRIN(I)*(RNUM-0.5)
+         X(I) = XT(I) + 2.0*DIRIN(I)*(RNUM-0.5)
+      END DO
       LOOP = LOOP + 1
       REG = 2.0
       IF (ISW(5) .GE. 0)   WRITE (ISYSWR, 1040) LOOP

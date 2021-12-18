@@ -69,7 +69,8 @@ C--- center x values for reasons of machine precision
     6 CZ(1)=CZ(1)+XM*(XM*CZ(3)-CZ(2))
       CZ(2)=CZ(2)-2.*XM*CZ(3)
    10 CONTINUE
-      DO 11  I=1,3
-   11 COEF2P(I)=CZ(I)
+      DO I=1,3
+         COEF2P(I)=CZ(I)
+      END DO
       RETURN
       END

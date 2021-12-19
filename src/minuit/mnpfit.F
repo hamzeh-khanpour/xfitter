@@ -28,15 +28,17 @@ C   method : chi**2 = min equation solved explicitly
       DIMENSION PARX2P(NPAR2P),PARY2P(NPAR2P),COEF2P(NPAR2P)
       DIMENSION CZ(3)
 C
-      DO 3  I=1,3
-    3 CZ(I)=0.
+      DO I=1,3
+         CZ(I)=0.
+      END DO
       SDEV2P=0.
       IF(NPAR2P.LT.3) GO TO 10
       F=NPAR2P
 C--- center x values for reasons of machine precision
       XM=0.
-      DO 2  I=1,NPAR2P
-    2 XM=XM+PARX2P(I)
+      DO I=1,NPAR2P
+         XM=XM+PARX2P(I)
+      END DO
       XM=XM/F
       X2=0.
       X3=0.

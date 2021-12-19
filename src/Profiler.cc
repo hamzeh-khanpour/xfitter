@@ -433,8 +433,8 @@ namespace xfitter
       }
       addSystematics("PDF_nuisance_param_"+std::to_string(++_ipdf)+":T", unc/uncertainties[0] );
     }
-    delete beta;
-    delete covar;
+    delete[] beta;
+    delete[] covar;
   }
   
 } //namespace xfitter

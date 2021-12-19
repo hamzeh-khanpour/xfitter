@@ -726,11 +726,12 @@ void chi2_scan_()
                           pointsmap[i].th_par.push_back(c_theo_.theo[i]);
                       }
 
-                  if (iset != 0)
+                  if (iset != 0){
                     if (MonteCarloPDFErr || SymmHessPDFErr || ParPDFErr)
                       isys++;
                     else if ((iset%2) == 0) //set the same index for Up and Down variation of asymmetric PDF errors
                       isys++;
+		  }
                   cset++;
 
                 } //end loop on PDF members
@@ -903,8 +904,8 @@ void chi2_scan_()
                     }
                   nsysloc += 1;
                 }
-              delete covmx;
-              delete beta_from_covmx;
+              delete[] covmx;
+              delete[] beta_from_covmx;
             }
 
           //Asymmetric PDF uncertainties, including hessian and model
@@ -1296,11 +1297,12 @@ void chi2_scan_()
               else
                 save_data_lhapdf6_(iset);
 
-              if (iset != 0)
+              if (iset != 0){
                 if (MonteCarloPDFErr || SymmHessPDFErr || ParPDFErr)
                   isys++;
                 else if ((iset%2) == 0) //set the same index for Up and Down variation of asymmetric PDF errors
                   isys++;
+	      }
               cset++;
             }
         }

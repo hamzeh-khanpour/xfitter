@@ -1,4 +1,3 @@
-*
 * $Id: mnvert.F,v 1.1.1.1 2007/01/03 00:23:21 kluget Exp $
 *
 * $Log: mnvert.F,v $
@@ -39,10 +38,11 @@ CC
       IF (N .LT. 1)  GO TO 100
       IF (N .GT. MAXINT)  GO TO 100
 C                   scale matrix by sqrt of diag elements
-      DO 8  I=1,N
-      SI = A(I,I)
-      IF (SI) 100,100,8
-    8 S(I) = 1.0/SQRT(SI)
+      DO I=1,N
+         SI = A(I,I)
+         IF (SI .LT. ZERO)  S(I) = 1.0/SQRT(SI)
+         GO TO 100
+      END DO
       DO I= 1, N
          DO J= 1, N
             A(I,J) = A(I,J) *S(I)*S(J)
@@ -58,13 +58,17 @@ C     preparation for elimination step1
          A(K,K)=0.0
          KP1=K+1
          KM1=K-1
-         IF(KM1)100,50,40
+         IF (KM1 .LT. 0) GOTO 100
+         IF (KM1 .EQ. 0) GOTO 50
+         GOTO 40
  40      DO J=1,KM1
             PP(J)=A(J,K)
             Q(J)=A(J,K)*Q(K)
             A(J,K)=0.
          END DO
- 50      IF(K-N)51,60,100
+ 50      IF ( (K-N) .LT. 0) GOTO 51
+         IF ( (K-N) .EQ. 0) GOTO 60
+         GOTO 100         
  51      DO J=KP1,N
             PP(J)=A(K,J)
             Q(J)=-A(K,J)*Q(K)

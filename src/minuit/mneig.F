@@ -66,13 +66,14 @@ C
       F = F+GL*A(J,I)
  50   CONTINUE
       HH = F/(H+H)
-      DO 60 J = 1,L
+      DO J = 1,L
          F = A(I,J)
          GL = WORK(N+J)-HH*F
          WORK(N+J) = GL
-         DO 60 K = 1,J
+         DO K = 1,J
             A(J,K) = A(J,K)-F*WORK(N+K)-GL*A(I,K)
- 60      CONTINUE
+         END DO
+      END DO
          WORK(I) = H
  65      I = I-1
  70   CONTINUE
@@ -83,14 +84,15 @@ C
 C
       IF(WORK(I) .EQ. ZERO .OR. L .EQ. 0) GO TO 100
 C
-      DO 90 J = 1,L
-      GL = ZERO
-      DO K = 1,L
-         GL = GL+A(I,K)*A(K,J)
+      DO J = 1,L
+         GL = ZERO
+         DO K = 1,L
+            GL = GL+A(I,K)*A(K,J)
+         END DO
+         DO K = 1,L
+            A(K,J) = A(K,J)-GL*A(K,I)
+         END DO
       END DO
-      DO 90 K = 1,L
-      A(K,J) = A(K,J)-GL*A(K,I)
-   90 CONTINUE
   100 WORK(I) = A(I,I)
       A(I,I) = ONE
 C
@@ -145,32 +147,33 @@ C
       S = ZERO
       M1 = M-1
       I = M
-      DO 200 I1 = L,M1
-      J = I
-      I = I-1
-      GL = C*WORK(N+I)
-      H = C*PT
-C
-      IF(ABS(PT) .GE. ABS(WORK(N+I))) GO TO 180
-C
-      C = PT/WORK(N+I)
-      R = SQRT(C*C+ONE)
-      WORK(N+J) = S*WORK(N+I)*R
-      S = ONE/R
-      C = C/R
-      GO TO 190
-  180 C = WORK(N+I)/PT
-      R = SQRT(C*C+ONE)
-      WORK(N+J) = S*PT*R
-      S = C/R
-      C = ONE/R
-  190 PT = C*WORK(I)-S*GL
-      WORK(J) = H+S*(C*GL+S*WORK(I))
-      DO 200 K = 1,N
-      H = A(K,J)
-      A(K,J) = S*A(K,I)+C*H
-      A(K,I) = C*A(K,I)-S*H
-  200 CONTINUE
+      DO I1 = L,M1
+         J = I
+         I = I-1
+         GL = C*WORK(N+I)
+         H = C*PT
+C     
+         IF(ABS(PT) .GE. ABS(WORK(N+I))) GO TO 180
+C     
+         C = PT/WORK(N+I)
+         R = SQRT(C*C+ONE)
+         WORK(N+J) = S*WORK(N+I)*R
+         S = ONE/R
+         C = C/R
+         GO TO 190
+ 180     C = WORK(N+I)/PT
+         R = SQRT(C*C+ONE)
+         WORK(N+J) = S*PT*R
+         S = C/R
+         C = ONE/R
+ 190     PT = C*WORK(I)-S*GL
+         WORK(J) = H+S*(C*GL+S*WORK(I))
+         DO K = 1,N
+            H = A(K,J)
+            A(K,J) = S*A(K,I)+C*H
+            A(K,I) = C*A(K,I)-S*H
+         END DO
+      END DO
       WORK(N+L) = S*PT
       WORK(L) = C*PT
 C

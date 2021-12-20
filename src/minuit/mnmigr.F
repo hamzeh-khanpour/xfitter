@@ -241,15 +241,16 @@ C                                        .  update covariance matrix
      +             (VHMAT(KK),KK=1,10)
       DSUM = 0.
       VSUM = 0.
-         DO  120  I=1, NPAR
-           DO  120  J=1, I
-           D = DIRIN(I)*DIRIN(J)/DELGAM - VG(I)*VG(J)/GVG
-           DSUM = DSUM + ABS(D)
-           NDEX = I*(I-1)/2 + J
-           VHMAT(NDEX) = VHMAT(NDEX) + 2.0*D
-           VSUM = VSUM + ABS(VHMAT(NDEX))
-  120      CONTINUE
-C                smooth local fluctuations by averaging DCOVAR
+      DO  I=1, NPAR
+         DO  J=1, I
+            D = DIRIN(I)*DIRIN(J)/DELGAM - VG(I)*VG(J)/GVG
+            DSUM = DSUM + ABS(D)
+            NDEX = I*(I-1)/2 + J
+            VHMAT(NDEX) = VHMAT(NDEX) + 2.0*D
+            VSUM = VSUM + ABS(VHMAT(NDEX))
+         END DO
+      END DO
+C     smooth local fluctuations by averaging DCOVAR
       DCOVAR = 0.5*(DCOVAR + DSUM/VSUM)
       IF (ISWTR.GE.3 .OR. LDEBUG) WRITE (ISYSWR,'(A,F5.1,A)')
      +      ' RELATIVE CHANGE IN COV. MATRIX=',DCOVAR*100.,'%'
@@ -259,10 +260,12 @@ C                smooth local fluctuations by averaging DCOVAR
       DO I= 1, NPAR
          FLNU(I) = DIRIN(I)/DELGAM - VG(I)/GVG
       END DO
-      DO 130 I= 1, NPAR
-      DO 130 J= 1, I
-      NDEX = I*(I-1)/2 + J
-  130 VHMAT(NDEX) = VHMAT(NDEX) + 2.0*GVG*FLNU(I)*FLNU(J)
+      DO I= 1, NPAR
+         DO J= 1, I
+            NDEX = I*(I-1)/2 + J
+            VHMAT(NDEX) = VHMAT(NDEX) + 2.0*GVG*FLNU(I)*FLNU(J)
+         END DO
+      END DO
   135 CONTINUE
 C                                              and see if converged
       IF (EDM .LT. 0.1*RHOTOL)  GO TO 300

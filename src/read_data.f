@@ -626,24 +626,6 @@ C     ---> copy the names in a new variable
          DATASETapplgridNames(i,NDATASETS) = TheoryInfoFile(i)
       enddo
 
-      ! add protection against Order=NNLO fits with NLO theory in ! APPLGIRDS
-      do i=1,2
-        if(TheoryType(i).eq.'applgrid'.and.DataSetIOrder(NDATASETS).gt.2) then 
-          print*,'Cannot run NNLO fit with applgrids, please specify DataSetTheoryOrder="NLO" in Scales in steering.txt'
-          call HF_stop
-        endif
-      enddo
-
-      if (TheoryType(1).eq.'expression') then
-        do i = 1,NTermsMax
-          if(TermType(i).eq.'applgrid'.and.DataSetIOrder(NDATASETS).gt.2) then
-            print*,'Cannot run NNLO fit with applgrids, please specify DataSetTheoryOrder="NLO" in Scales in steering.txt'
-            call HF_stop
-          endif
-        enddo
-      endif
-
-
       ! set parameters for general theory interface here instead of
       ! src/init_theory.f.  A.S.
       if ( TheoryType(1).eq.'expression' ) then
@@ -1323,6 +1305,8 @@ C Basic consistency check:
          elseif (ColumnType(i).eq.'Error') then
             NUncert = NUncert + 1
             SystematicType(NUncert) = ColumnName(i)
+         elseif (ColumnType(i).eq.'Flag') then
+            continue
          else
             call hf_errlog(5,'F:Unknown column type in file '
      $           //trim(FileName))
